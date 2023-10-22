@@ -22,3 +22,9 @@ in depth:
  - the --rm delete the container once it finished the execution
  - the -v mount the folder with the code
  - the -it 
+
+## Folder structure
+
+The folder structure is done checking this unofficial layout:
+
+https://github.com/golang-standards/project-layout
