@@ -14,3 +14,13 @@ func TestCreateFieldMatrix(t *testing.T) {
 		t.Fatalf("Matrix rows count expected %d, actual %d", n, len(matrix))
 	}
 }
+
+func TestSetLifeInCell(t *testing.T) {
+	matrix := createFieldMatrix()
+
+	setLifeInCell(matrix, 0, 0)
+
+	if matrix[0][0] != LIFE_CELL {
+		t.Fatalf("Matrix cell value expected %d, actual %d", LIFE_CELL, matrix[0][0])
+	}
+}
