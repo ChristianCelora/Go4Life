@@ -17,8 +17,13 @@ func TestCreateFieldMatrix(t *testing.T) {
 
 func TestSetLifeInCell(t *testing.T) {
 	matrix := createFieldMatrix()
+	cell := Cell{
+		matrix: matrix, 
+		x: 0, 
+		y: 0,
+	}
 
-	setLifeInCell(matrix, 0, 0)
+	setLifeInCell(cell)
 
 	if matrix[0][0] != LIFE_CELL {
 		t.Fatalf("Matrix cell value expected %d, actual %d", LIFE_CELL, matrix[0][0])
