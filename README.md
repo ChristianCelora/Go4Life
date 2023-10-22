@@ -28,3 +28,12 @@ in depth:
 The folder structure is done checking this unofficial layout:
 
 https://github.com/golang-standards/project-layout
+
+## Run Tests
+
+To run tests run the CLi command
+
+```sh
+go test -v <package>
+go test -v ./internal # Example of testing the internal package
+```
