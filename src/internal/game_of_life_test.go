@@ -29,3 +29,43 @@ func TestSetLifeInCell(t *testing.T) {
 		t.Fatalf("Matrix cell value expected %d, actual %d", LIFE_CELL, matrix[0][0])
 	}
 }
+
+type Coordinates struct {
+	x int
+	y int
+}
+
+func TestCountCellNeighbours(t *testing.T) {
+	var neighbours int
+
+	tests := []struct {
+		other_life_coordinates []Coordinates 
+		cell_coordinate Coordinates 
+		expected_count int
+	} {
+		{
+			other_life_coordinates: []Coordinates{
+				Coordinates{x: 1, y: 0},
+				Coordinates{x: 0, y: 1},
+				Coordinates{x: 1, y: 1},
+			}, 
+			cell_coordinate: Coordinates{x: 0, y: 0}, 
+			expected_count: 2,
+		},
+	}
+
+
+	for _, test := range tests {
+		matrix := createFieldMatrix()
+		cell := Cell{matrix, test.cell_coordinate.x, test.cell_coordinate.y}
+		for _, coordinates := range test.other_life_coordinates {
+			setLifeInCell(Cell{matrix: matrix, x: coordinates.x, y: coordinates.y})
+		}
+		
+		neighbours = countCellNeighbours(cell)
+		
+		if neighbours != 3 {
+			t.Fatalf("expected %d neighbours for cell %+v", test.expected_count, cell)
+		}
+	}
+}
