@@ -50,7 +50,31 @@ func TestCountCellNeighbours(t *testing.T) {
 				Coordinates{x: 1, y: 1},
 			}, 
 			cell_coordinate: Coordinates{x: 0, y: 0}, 
-			expected_count: 2,
+			expected_count: 3,
+		},
+		{
+			other_life_coordinates: []Coordinates{
+				Coordinates{x: 0, y: 0},
+				Coordinates{x: 0, y: 1},
+				Coordinates{x: 0, y: 2},
+				Coordinates{x: 1, y: 0},
+				Coordinates{x: 1, y: 2},
+				Coordinates{x: 2, y: 0},
+				Coordinates{x: 2, y: 1},
+				Coordinates{x: 2, y: 2},
+			}, 
+			cell_coordinate: Coordinates{x: 1, y: 1}, 
+			expected_count: 8,
+		},
+		{
+			other_life_coordinates: []Coordinates{
+				Coordinates{x: 0, y: 0},
+				Coordinates{x: 1, y: 2},
+				Coordinates{x: 2, y: 0},
+				Coordinates{x: 2, y: 1},
+			}, 
+			cell_coordinate: Coordinates{x: 1, y: 1}, 
+			expected_count: 4,
 		},
 	}
 
@@ -64,8 +88,8 @@ func TestCountCellNeighbours(t *testing.T) {
 		
 		neighbours = countCellNeighbours(cell)
 		
-		if neighbours != 3 {
-			t.Fatalf("expected %d neighbours for cell %+v", test.expected_count, cell)
+		if neighbours != test.expected_count {
+			t.Fatalf("expected %d neighbours (actual %d) for cell %+v", test.expected_count, neighbours, cell)
 		}
 	}
 }
