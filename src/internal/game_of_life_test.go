@@ -76,6 +76,15 @@ func TestCountCellNeighbours(t *testing.T) {
 			cell_coordinate: Coordinates{x: 1, y: 1}, 
 			expected_count: 4,
 		},
+		{
+			other_life_coordinates: []Coordinates{
+				Coordinates{1,2},
+				Coordinates{2,1},
+				Coordinates{2,2},
+			}, 
+			cell_coordinate: Coordinates{x: 1, y: 1}, 
+			expected_count: 3,
+		},
 	}
 
 
@@ -92,4 +101,51 @@ func TestCountCellNeighbours(t *testing.T) {
 			t.Fatalf("expected %d neighbours (actual %d) for cell %+v", test.expected_count, neighbours, cell)
 		}
 	}
+}
+
+func TestNextGeneration(t *testing.T) {
+	tests := []struct {
+		matrix_life []Coordinates 
+		expected_matrix_life []Coordinates
+	} {
+		{
+			matrix_life: []Coordinates{
+				Coordinates{1,1},
+				Coordinates{1,2},
+				Coordinates{2,1},
+				Coordinates{2,2},
+			},
+			expected_matrix_life: []Coordinates{
+				Coordinates{1,1},
+				Coordinates{1,2},
+				Coordinates{2,1},
+				Coordinates{2,2},
+			},
+		},
+	}
+
+
+	for _, test := range tests {
+		old_matrix := createFieldMatrix()
+		for _, c := range test.matrix_life {
+			setLifeInCell(Cell{old_matrix, c.x, c.y})
+		}
+
+		expected_matrix := createFieldMatrix()
+		for _, c := range test.expected_matrix_life {
+			setLifeInCell(Cell{expected_matrix, c.x, c.y})
+		}
+
+		actual_matrix := nextGeneration(old_matrix)
+
+		for i, row := range actual_matrix {
+			for j, cell := range row {
+				if cell != expected_matrix[i][j] {
+					t.Logf("matrix: %v", actual_matrix)
+					t.Fatalf("cell %v value %d, different than expected %d", Cell{actual_matrix, i, j}, cell, expected_matrix[i][j])
+				}
+			}
+		}
+	}
+
 }

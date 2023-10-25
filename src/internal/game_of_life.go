@@ -2,6 +2,7 @@ package internal
 
 const (
 	MATRIX_SIZE = 100
+	DEAD_CELL = 0
 	LIFE_CELL = 1
 )
 
@@ -9,6 +10,10 @@ type Cell struct {
 	matrix *[MATRIX_SIZE][MATRIX_SIZE]uint8
 	x int
 	y int
+}
+
+func (c *Cell) isAlive() bool {
+	return c.matrix[c.x][c.y] == LIFE_CELL
 }
 
 func createFieldMatrix() *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
@@ -36,4 +41,26 @@ func countCellNeighbours(c Cell) int {
 	}
 
 	return count
+}
+
+func nextGeneration(matrix *[MATRIX_SIZE][MATRIX_SIZE]uint8) *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
+	var n_neighbours int
+	
+	new_matrix := createFieldMatrix()
+	for i, row := range matrix {
+		for j := range row {
+			cell := Cell{matrix, i, j}
+			n_neighbours = countCellNeighbours(cell)
+
+			if n_neighbours == 3 {
+				new_matrix[i][j] = LIFE_CELL
+			} else if cell.isAlive() && (n_neighbours == 2 || n_neighbours == 3) {
+				new_matrix[i][j] = LIFE_CELL
+			} else {
+				new_matrix[i][j] = DEAD_CELL
+			}
+		}
+	}
+
+	return new_matrix
 }
