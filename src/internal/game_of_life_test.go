@@ -4,7 +4,7 @@ import "testing"
 
 func TestCreateFieldMatrix(t *testing.T) {
 	n := MATRIX_SIZE
-	matrix := createFieldMatrix()
+	matrix := CreateFieldMatrix()
 
 	if len(matrix) != n {
 		t.Fatalf("Matrix columns count expected %d, actual %d", n, len(matrix))
@@ -16,7 +16,7 @@ func TestCreateFieldMatrix(t *testing.T) {
 }
 
 func TestSetLifeInCell(t *testing.T) {
-	matrix := createFieldMatrix()
+	matrix := CreateFieldMatrix()
 	cell := Cell{
 		matrix: matrix, 
 		x: 0, 
@@ -89,7 +89,7 @@ func TestCountCellNeighbours(t *testing.T) {
 
 
 	for _, test := range tests {
-		matrix := createFieldMatrix()
+		matrix := CreateFieldMatrix()
 		cell := Cell{matrix, test.cell_coordinate.x, test.cell_coordinate.y}
 		for _, coordinates := range test.other_life_coordinates {
 			setLifeInCell(Cell{matrix: matrix, x: coordinates.x, y: coordinates.y})
@@ -210,12 +210,12 @@ func TestNextGeneration(t *testing.T) {
 
 
 	for _, test := range tests {
-		old_matrix := createFieldMatrix()
+		old_matrix := CreateFieldMatrix()
 		for _, c := range test.matrix_life {
 			setLifeInCell(Cell{old_matrix, c.x, c.y})
 		}
 
-		expected_matrix := createFieldMatrix()
+		expected_matrix := CreateFieldMatrix()
 		for _, c := range test.expected_matrix_life {
 			setLifeInCell(Cell{expected_matrix, c.x, c.y})
 		}

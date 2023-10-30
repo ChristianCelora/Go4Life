@@ -16,7 +16,7 @@ func (c *Cell) isAlive() bool {
 	return c.matrix[c.x][c.y] == LIFE_CELL
 }
 
-func createFieldMatrix() *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
+func CreateFieldMatrix() *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
 	var matrix [MATRIX_SIZE][MATRIX_SIZE]uint8 
 	return &matrix
 }
@@ -46,7 +46,7 @@ func countCellNeighbours(c Cell) int {
 func nextGeneration(matrix *[MATRIX_SIZE][MATRIX_SIZE]uint8) *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
 	var n_neighbours int
 	
-	new_matrix := createFieldMatrix()
+	new_matrix := CreateFieldMatrix()
 	for i, row := range matrix {
 		for j := range row {
 			cell := Cell{matrix, i, j}
