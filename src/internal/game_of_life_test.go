@@ -108,7 +108,11 @@ func TestNextGeneration(t *testing.T) {
 		matrix_life []Coordinates 
 		expected_matrix_life []Coordinates
 	} {
-		{
+		/**
+		* xx	xx
+		* xx -> xx
+		*/
+		{	
 			matrix_life: []Coordinates{
 				Coordinates{1,1},
 				Coordinates{1,2},
@@ -118,6 +122,86 @@ func TestNextGeneration(t *testing.T) {
 			expected_matrix_life: []Coordinates{
 				Coordinates{1,1},
 				Coordinates{1,2},
+				Coordinates{2,1},
+				Coordinates{2,2},
+			},
+		},
+		/**
+		* 		 x
+		* xxx -> x
+		* 		 x
+		*/
+		{
+			matrix_life: []Coordinates{
+				Coordinates{1,0},
+				Coordinates{1,1},
+				Coordinates{1,2},
+			},
+			expected_matrix_life: []Coordinates{
+				Coordinates{0,1},
+				Coordinates{1,1},
+				Coordinates{2,1},
+			},
+		},
+		/**
+		* 		  x
+		* xxx -> xx
+		* x		 x
+		*/
+		{
+			matrix_life: []Coordinates{
+				Coordinates{1,0},
+				Coordinates{1,1},
+				Coordinates{1,2},
+				Coordinates{2,0},
+			},
+			expected_matrix_life: []Coordinates{
+				Coordinates{0,1},
+				Coordinates{1,0},
+				Coordinates{1,1},
+				Coordinates{2,0},
+			},
+		},
+		/**
+		*  x	xx	  
+		* xx -> xx
+		* x		xx
+		*/
+		{
+			matrix_life: []Coordinates{
+				Coordinates{0,1},
+				Coordinates{1,0},
+				Coordinates{1,1},
+				Coordinates{2,0},
+			},
+			expected_matrix_life: []Coordinates{
+				Coordinates{0,0},
+				Coordinates{0,1},
+				Coordinates{1,0},
+				Coordinates{1,1},
+				Coordinates{2,0},
+				Coordinates{2,1},
+			},
+		},
+		/**
+		* xx	 xx 
+		* xx -> x  x
+		* xx     xx
+		*/
+		{
+			matrix_life: []Coordinates{
+				Coordinates{0,1},
+				Coordinates{0,2},
+				Coordinates{1,1},
+				Coordinates{1,2},
+				Coordinates{2,1},
+				Coordinates{2,2},
+			},
+			expected_matrix_life: []Coordinates{
+				Coordinates{0,1},
+				Coordinates{0,2},
+				Coordinates{1,0},
+				Coordinates{1,3},
 				Coordinates{2,1},
 				Coordinates{2,2},
 			},
