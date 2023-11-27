@@ -22,4 +22,5 @@ RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 WORKDIR $GOPATH
 
 EXPOSE 80 
+EXPOSE 8090
 # CMD ["apachectl", "-D", "FOREGROUND"] # apachectl -D FOREGROUND

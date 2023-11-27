@@ -15,7 +15,7 @@ docker build -t go-4-life .
 To run it use:
 
 ```sh
-docker run --rm -p 8888:80 -v "$(pwd)"/src:/go/src -it go-4-life
+docker run --rm -p 8888:8090 -v "$(pwd)"/src:/go/src -it go-4-life
 ```
 
 in depth:
@@ -39,6 +39,16 @@ go test -v ./internal # Example of testing the internal package
 ```
 
 ## Run web server
+
+For now we use go to render the static html pages of the project
+
+### Go 
+
+```
+go run main.go
+```
+
+### Apache (not used)
 
 Apache2 is installed in the docker. Just run it inside the container
 
