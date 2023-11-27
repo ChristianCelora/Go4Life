@@ -12,7 +12,7 @@ const (
 )
 
 func registerStaticPages() {
-	fs := http.FileServer(http.Dir("./view"))
+	fs := http.FileServer(http.Dir("./static/view"))
 	http.Handle("/", fs)
 }
 
