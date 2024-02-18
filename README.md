@@ -44,9 +44,13 @@ For now we use go to render the static html pages of the project
 
 ### Go 
 
+Init server
+
 ```
 go run main.go
 ```
+
+Note: server should be recompiled in case of changes
 
 ### Apache (not used)
 

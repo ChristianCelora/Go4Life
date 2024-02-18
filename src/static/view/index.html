@@ -1,12 +1,43 @@
 <html>
     <head>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+
+        <style>
+            .cell {
+                width: 10px;
+                height: 10px;
+                border: 1px solid black;
+            }
+        </style>
     </head>
     <body>
         <center>
-            <h2>Conway's Game of Life</h2>
-            <br>
-            <i x-data="{message: 'Alpine.js + Go'}" x-text="message"></i>
+            <div>
+                <h2>Conway's Game of Life</h2>
+                <i x-data="{message: 'Alpine.js + Go'}" x-text="message"></i>
+                <br>
+            </div>
+            <div>
+                <button x-on:click="console.log('start game')">
+                    Start game
+                </button>
+            <div 
+                x-data="{ matrix: [] }"
+                x-init="matrix = await (await fetch('/render')).json()"
+            >
+                <table>
+                <template x-for="row in matrix.Matrix">
+                    <tr>
+                        <template x-for="cell in row">
+                            <td>
+                                <div class="cell" x-text="color"></div>
+                            </td>
+                        </template>
+                    </tr>
+                </template>
+                </table>
+            </div>
         </center>
     </body>
 </html>
