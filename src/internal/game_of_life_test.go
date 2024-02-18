@@ -18,9 +18,9 @@ func TestCreateFieldMatrix(t *testing.T) {
 func TestSetLifeInCell(t *testing.T) {
 	matrix := CreateFieldMatrix()
 	cell := Cell{
-		matrix: matrix, 
-		x: 0, 
-		y: 0,
+		matrix: matrix,
+		x:      0,
+		y:      0,
 	}
 
 	setLifeInCell(cell)
@@ -39,54 +39,53 @@ func TestCountCellNeighbours(t *testing.T) {
 	var neighbours int
 
 	tests := []struct {
-		other_life_coordinates []Coordinates 
-		cell_coordinate Coordinates 
-		expected_count int
-	} {
+		other_life_coordinates []Coordinates
+		cell_coordinate        Coordinates
+		expected_count         int
+	}{
 		{
 			other_life_coordinates: []Coordinates{
-				Coordinates{x: 1, y: 0},
-				Coordinates{x: 0, y: 1},
-				Coordinates{x: 1, y: 1},
-			}, 
-			cell_coordinate: Coordinates{x: 0, y: 0}, 
-			expected_count: 3,
+				{x: 1, y: 0},
+				{x: 0, y: 1},
+				{x: 1, y: 1},
+			},
+			cell_coordinate: Coordinates{x: 0, y: 0},
+			expected_count:  3,
 		},
 		{
 			other_life_coordinates: []Coordinates{
-				Coordinates{x: 0, y: 0},
-				Coordinates{x: 0, y: 1},
-				Coordinates{x: 0, y: 2},
-				Coordinates{x: 1, y: 0},
-				Coordinates{x: 1, y: 2},
-				Coordinates{x: 2, y: 0},
-				Coordinates{x: 2, y: 1},
-				Coordinates{x: 2, y: 2},
-			}, 
-			cell_coordinate: Coordinates{x: 1, y: 1}, 
-			expected_count: 8,
+				{x: 0, y: 0},
+				{x: 0, y: 1},
+				{x: 0, y: 2},
+				{x: 1, y: 0},
+				{x: 1, y: 2},
+				{x: 2, y: 0},
+				{x: 2, y: 1},
+				{x: 2, y: 2},
+			},
+			cell_coordinate: Coordinates{x: 1, y: 1},
+			expected_count:  8,
 		},
 		{
 			other_life_coordinates: []Coordinates{
-				Coordinates{x: 0, y: 0},
-				Coordinates{x: 1, y: 2},
-				Coordinates{x: 2, y: 0},
-				Coordinates{x: 2, y: 1},
-			}, 
-			cell_coordinate: Coordinates{x: 1, y: 1}, 
-			expected_count: 4,
+				{x: 0, y: 0},
+				{x: 1, y: 2},
+				{x: 2, y: 0},
+				{x: 2, y: 1},
+			},
+			cell_coordinate: Coordinates{x: 1, y: 1},
+			expected_count:  4,
 		},
 		{
 			other_life_coordinates: []Coordinates{
-				Coordinates{1,2},
-				Coordinates{2,1},
-				Coordinates{2,2},
-			}, 
-			cell_coordinate: Coordinates{x: 1, y: 1}, 
-			expected_count: 3,
+				{1, 2},
+				{2, 1},
+				{2, 2},
+			},
+			cell_coordinate: Coordinates{x: 1, y: 1},
+			expected_count:  3,
 		},
 	}
-
 
 	for _, test := range tests {
 		matrix := CreateFieldMatrix()
@@ -94,9 +93,9 @@ func TestCountCellNeighbours(t *testing.T) {
 		for _, coordinates := range test.other_life_coordinates {
 			setLifeInCell(Cell{matrix: matrix, x: coordinates.x, y: coordinates.y})
 		}
-		
+
 		neighbours = countCellNeighbours(cell)
-		
+
 		if neighbours != test.expected_count {
 			t.Fatalf("expected %d neighbours (actual %d) for cell %+v", test.expected_count, neighbours, cell)
 		}
@@ -105,109 +104,108 @@ func TestCountCellNeighbours(t *testing.T) {
 
 func TestNextGeneration(t *testing.T) {
 	tests := []struct {
-		matrix_life []Coordinates 
+		matrix_life          []Coordinates
 		expected_matrix_life []Coordinates
-	} {
+	}{
 		/**
 		* xx	xx
 		* xx -> xx
-		*/
-		{	
+		 */
+		{
 			matrix_life: []Coordinates{
-				Coordinates{1,1},
-				Coordinates{1,2},
-				Coordinates{2,1},
-				Coordinates{2,2},
+				{1, 1},
+				{1, 2},
+				{2, 1},
+				{2, 2},
 			},
 			expected_matrix_life: []Coordinates{
-				Coordinates{1,1},
-				Coordinates{1,2},
-				Coordinates{2,1},
-				Coordinates{2,2},
+				{1, 1},
+				{1, 2},
+				{2, 1},
+				{2, 2},
 			},
 		},
 		/**
 		* 		 x
 		* xxx -> x
 		* 		 x
-		*/
+		 */
 		{
 			matrix_life: []Coordinates{
-				Coordinates{1,0},
-				Coordinates{1,1},
-				Coordinates{1,2},
+				{1, 0},
+				{1, 1},
+				{1, 2},
 			},
 			expected_matrix_life: []Coordinates{
-				Coordinates{0,1},
-				Coordinates{1,1},
-				Coordinates{2,1},
+				{0, 1},
+				{1, 1},
+				{2, 1},
 			},
 		},
 		/**
 		* 		  x
 		* xxx -> xx
 		* x		 x
-		*/
+		 */
 		{
 			matrix_life: []Coordinates{
-				Coordinates{1,0},
-				Coordinates{1,1},
-				Coordinates{1,2},
-				Coordinates{2,0},
+				{1, 0},
+				{1, 1},
+				{1, 2},
+				{2, 0},
 			},
 			expected_matrix_life: []Coordinates{
-				Coordinates{0,1},
-				Coordinates{1,0},
-				Coordinates{1,1},
-				Coordinates{2,0},
+				{0, 1},
+				{1, 0},
+				{1, 1},
+				{2, 0},
 			},
 		},
 		/**
-		*  x	xx	  
+		*  x	xx
 		* xx -> xx
 		* x		xx
-		*/
+		 */
 		{
 			matrix_life: []Coordinates{
-				Coordinates{0,1},
-				Coordinates{1,0},
-				Coordinates{1,1},
-				Coordinates{2,0},
+				{0, 1},
+				{1, 0},
+				{1, 1},
+				{2, 0},
 			},
 			expected_matrix_life: []Coordinates{
-				Coordinates{0,0},
-				Coordinates{0,1},
-				Coordinates{1,0},
-				Coordinates{1,1},
-				Coordinates{2,0},
-				Coordinates{2,1},
+				{0, 0},
+				{0, 1},
+				{1, 0},
+				{1, 1},
+				{2, 0},
+				{2, 1},
 			},
 		},
 		/**
-		* xx	 xx 
+		* xx	 xx
 		* xx -> x  x
 		* xx     xx
-		*/
+		 */
 		{
 			matrix_life: []Coordinates{
-				Coordinates{0,1},
-				Coordinates{0,2},
-				Coordinates{1,1},
-				Coordinates{1,2},
-				Coordinates{2,1},
-				Coordinates{2,2},
+				{0, 1},
+				{0, 2},
+				{1, 1},
+				{1, 2},
+				{2, 1},
+				{2, 2},
 			},
 			expected_matrix_life: []Coordinates{
-				Coordinates{0,1},
-				Coordinates{0,2},
-				Coordinates{1,0},
-				Coordinates{1,3},
-				Coordinates{2,1},
-				Coordinates{2,2},
+				{0, 1},
+				{0, 2},
+				{1, 0},
+				{1, 3},
+				{2, 1},
+				{2, 2},
 			},
 		},
 	}
-
 
 	for _, test := range tests {
 		old_matrix := CreateFieldMatrix()
@@ -220,7 +218,7 @@ func TestNextGeneration(t *testing.T) {
 			setLifeInCell(Cell{expected_matrix, c.x, c.y})
 		}
 
-		actual_matrix := nextGeneration(old_matrix)
+		actual_matrix := NextGeneration(old_matrix)
 
 		for i, row := range actual_matrix {
 			for j, cell := range row {
