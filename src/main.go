@@ -1,10 +1,10 @@
 package main
 
 import (
-	"net/http"
 	"golife/api"
-	"strconv"
 	"log"
+	"net/http"
+	"strconv"
 )
 
 const (
@@ -18,6 +18,7 @@ func registerStaticPages() {
 
 func registerApiRoutes() {
 	http.HandleFunc("/render", api.RenderMatrix)
+	http.HandleFunc("/step", api.GetNextStep)
 }
 
 func main() {
@@ -26,7 +27,7 @@ func main() {
 	registerStaticPages()
 	registerApiRoutes()
 	log.Print("Listening on port " + strconv.Itoa(SERVER_PORT))
-	err := http.ListenAndServe(":" + strconv.Itoa(SERVER_PORT), nil)
+	err := http.ListenAndServe(":"+strconv.Itoa(SERVER_PORT), nil)
 	if err != nil {
 		log.Fatal(err)
 	}
