@@ -2,22 +2,26 @@
     <head>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <script>
-            async function nextStep(e) {
+            async function initMatrix() {
+                let res = await (await fetch('/render')).json()
+                return res.matrix
+            }
+
+            async function nextStep(matrix) {
                 let res = await fetch("/step", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(e.Matrix)
+                    body: JSON.stringify({"matrix": matrix})
                 })
-                if (res.ok) {
-                    let new_matrix = await res.json()
-                    e.Matrix = new_matrix
-                } else {
+                if (!res.ok) {
                     let error = await res.json()
-                    console.error(error);
                     alert(error.Msg)
+                    return matrix
                 }
+                let res_json = await res.json()
+                return res_json.matrix
             }
         </script>
 
@@ -27,6 +31,11 @@
                 width: 5px;
                 height: 5px;
                 border: 1px solid black;
+                cursor: pointer;
+            }
+
+            .alive {
+                background-color: brown;
             }
         </style>
     </head>
@@ -43,21 +52,32 @@
                 </button>
             <div 
                 x-data="{ matrix: [] }"
-                x-init="matrix = await (await fetch('/render')).json()"
+                x-init="matrix = await initMatrix()"
             >
                 <table>
-                <template x-for="row in matrix.Matrix">
+                <template x-for="(row, i) in matrix">
                     <tr>
-                        <template x-for="cell in row">
+                        <template x-for="(cell, j) in row">
                             <td>
-                                <div class="cell"></div>
+                                <div 
+                                    class="cell"
+                                    :class="life == 1 ? 'alive' : ''"
+                                    x-on:click="life = life == 0 ? 1 : 0; matrix[i][j] = life"
+                                    x-data="{
+                                        x: i,
+                                        y: j,
+                                        life: cell
+                                    }"
+                                >
+
+                                </div>
                             </td>
                         </template>
                     </tr>
                 </template>
                 </table>
 
-                <button x-on:click="nextStep(matrix)">
+                <button x-on:click="matrix = await nextStep(matrix)">
                     Next step
                 </button>
             </div>

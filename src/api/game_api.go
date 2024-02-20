@@ -12,7 +12,7 @@ type ApiErrorRes struct {
 }
 
 type RenderMatrixRes struct {
-	Matrix [internal.MATRIX_SIZE][internal.MATRIX_SIZE]uint8
+	Matrix [internal.MATRIX_SIZE][internal.MATRIX_SIZE]uint8 `json:"matrix"`
 }
 
 func RenderMatrix(w http.ResponseWriter, req *http.Request) {
@@ -25,11 +25,13 @@ func RenderMatrix(w http.ResponseWriter, req *http.Request) {
 }
 
 type GetNextStepReq struct {
-	Matrix [internal.MATRIX_SIZE][internal.MATRIX_SIZE]uint8
+	Matrix [internal.MATRIX_SIZE][internal.MATRIX_SIZE]uint8 `json:"matrix"`
 }
 
 func GetNextStep(w http.ResponseWriter, req *http.Request) {
 	var req_body GetNextStepReq
+	// req_body_contents, _ := io.ReadAll(req.Body)
+	// log.Printf("%s", req_body_contents)
 	err := json.NewDecoder(req.Body).Decode(&req_body)
 	if err != nil {
 		// http.Error(w, err.Error(), http.StatusBadRequest)
