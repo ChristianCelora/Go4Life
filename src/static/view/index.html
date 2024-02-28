@@ -61,7 +61,7 @@
                             <td>
                                 <div 
                                     class="cell"
-                                    :class="life == 1 ? 'alive' : ''"
+                                    :class="cell == 1 ? 'alive' : ''"
                                     x-on:click="life = life == 0 ? 1 : 0; matrix[i][j] = life"
                                     x-data="{
                                         x: i,
