@@ -2,9 +2,46 @@
     <head>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <script>
-            async function initMatrix() {
-                let res = await (await fetch('/render')).json()
-                return res.matrix
+            function gameLifeComponent() {
+                return { 
+                    matrix: [],
+                    is_started: false,
+                    async initMatrix() {
+                        let res = await (await fetch('/render')).json()
+                        return res.matrix
+                    },
+                    startGame(matrix) {
+                        this.is_started = true
+                        this.gameLoop(matrix)
+                    },
+                    stopGame() {
+                        this.is_started = false
+                    },
+                    gameLoop(matrix) {
+                        if (this.is_started) {
+                            setTimeout(async () => {
+                                this.matrix = await this.nextStep(matrix)
+                                this.gameLoop(this.matrix)
+                            }, 3000)
+                        }
+                    },
+                    async nextStep(matrix) {
+                        let res = await fetch("/step", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({"matrix": matrix})
+                        })
+                        if (!res.ok) {
+                            let error = await res.json()
+                            alert(error.Msg)
+                            return matrix
+                        }
+                        let res_json = await res.json()
+                        return res_json.matrix
+                    } 
+                }
             }
 
             async function nextStep(matrix) {
@@ -22,7 +59,8 @@
                 }
                 let res_json = await res.json()
                 return res_json.matrix
-            }
+            } 
+            
         </script>
 
 
@@ -46,14 +84,23 @@
                 <i x-data="{message: 'Alpine.js + Go'}" x-text="message"></i>
                 <br>
             </div>
-            <div>
-                <button x-on:click="console.log('start game')">
-                    Start game
-                </button>
             <div 
-                x-data="{ matrix: [] }"
+                x-data="gameLifeComponent()"
                 x-init="matrix = await initMatrix()"
             >
+                <button 
+                    x-on:click="matrix = await nextStep(matrix)"    
+                >
+                Next step
+                </button>
+                <div>
+                    <button x-show="!is_started" x-on:click="startGame(matrix)">
+                        Start 
+                    </button>
+                    <button x-show="is_started" x-on:click="stopGame()">
+                        Stop 
+                    </button>
+                </div>
                 <table>
                 <template x-for="(row, i) in matrix">
                     <tr>
@@ -76,10 +123,6 @@
                     </tr>
                 </template>
                 </table>
-
-                <button x-on:click="matrix = await nextStep(matrix)">
-                    Next step
-                </button>
             </div>
         </center>
     </body>
