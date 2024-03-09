@@ -10,6 +10,9 @@
                         let res = await (await fetch('/render')).json()
                         return res.matrix
                     },
+                    toggleLifeInCell(i, j) {
+                        this.matrix[i][j] = this.matrix[i][j] == 0 ? 1 : 0
+                    },
                     startGame(matrix) {
                         this.is_started = true
                         this.gameLoop(matrix)
@@ -20,8 +23,11 @@
                     gameLoop(matrix) {
                         if (this.is_started) {
                             setTimeout(async () => {
-                                this.matrix = await this.nextStep(matrix)
-                                this.gameLoop(this.matrix)
+                                let new_matrix = await this.nextStep(matrix)
+                                if (this.is_started) {
+                                    this.matrix = new_matrix
+                                    this.gameLoop(this.matrix)
+                                }
                             }, 3000)
                         }
                     },
@@ -109,12 +115,8 @@
                                 <div 
                                     class="cell"
                                     :class="cell == 1 ? 'alive' : ''"
-                                    x-on:click="life = life == 0 ? 1 : 0; matrix[i][j] = life"
-                                    x-data="{
-                                        x: i,
-                                        y: j,
-                                        life: cell
-                                    }"
+                                    x-on:click="toggleLifeInCell(i, j)"
+                                    x-on:mouseover="toggleLifeInCell(i, j)"
                                 >
 
                                 </div>
