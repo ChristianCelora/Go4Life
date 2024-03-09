@@ -116,7 +116,7 @@
                                     class="cell"
                                     :class="cell == 1 ? 'alive' : ''"
                                     x-on:click="toggleLifeInCell(i, j)"
-                                    x-on:mouseover="toggleLifeInCell(i, j)"
+                                    x-on:mouseover="$event.shiftKey ? toggleLifeInCell(i, j) : null"
                                 >
 
                                 </div>
