@@ -99,6 +99,11 @@
                 >
                 Next step
                 </button>
+                <button 
+                    x-on:click="matrix = await initMatrix()"    
+                >
+                Clear
+                </button>
                 <div>
                     <button x-show="!is_started" x-on:click="startGame(matrix)">
                         Start 
