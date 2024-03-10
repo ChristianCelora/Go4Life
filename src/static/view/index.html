@@ -1,6 +1,7 @@
 <html>
     <head>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
         <script>
             function gameLifeComponent() {
                 return { 
@@ -84,52 +85,81 @@
         </style>
     </head>
     <body>
-        <center>
-            <div>
-                <h2>Conway's Game of Life</h2>
-                <i x-data="{message: 'Alpine.js + Go'}" x-text="message"></i>
-                <br>
-            </div>
-            <div 
-                x-data="gameLifeComponent()"
-                x-init="matrix = await initMatrix()"
-            >
-                <button 
-                    x-on:click="matrix = await nextStep(matrix)"    
-                >
-                Next step
-                </button>
-                <button 
-                    x-on:click="matrix = await initMatrix()"    
-                >
-                Clear
-                </button>
+        <center class="flex flex-row pt-3">
+            <div class="basis-2/3 mx-auto">
                 <div>
-                    <button x-show="!is_started" x-on:click="startGame(matrix)">
-                        Start 
-                    </button>
-                    <button x-show="is_started" x-on:click="stopGame()">
-                        Stop 
-                    </button>
+                    <div class="font-bold tracking-wide text-2xl pb-2">
+                        Conway's Game of Life
+                    </div>
+                    <div 
+                        class = "font-light italic"
+                        x-data="{message: 'Alpine.js + Go'}" 
+                        x-text="message"
+                    >
+                    </div>
+                    <br>
                 </div>
-                <table>
-                <template x-for="(row, i) in matrix">
-                    <tr>
-                        <template x-for="(cell, j) in row">
-                            <td>
-                                <div 
-                                    class="cell"
-                                    :class="cell == 1 ? 'alive' : ''"
-                                    x-on:click="toggleLifeInCell(i, j)"
-                                    x-on:mouseover="$event.shiftKey ? toggleLifeInCell(i, j) : null"
+                <div
+                    class="pt-5"
+                    x-data="gameLifeComponent()"
+                    x-init="matrix = await initMatrix()"
+                >
+                    
+                    <div class="flex flex-row pb-2">
+                        <div class="flex flex-row basis-2/3 mx-auto">
+                            <div class="basis-1/3">
+                                <button 
+                                class="px-4 py-1 mx-auto border-2 rounded border-sky-500 hover:text-white hover:bg-sky-500 transition ease-in-out delay-150"
+                                x-on:click="matrix = await nextStep(matrix)"    
                                 >
+                                    Next step
+                                </button>
+                            </div>
+                            <div class="basis-1/3">
+                                <button 
+                                    class="px-4 py-1 mx-auto border-2 rounded border-emerald-500 hover:text-white hover:bg-emerald-500 transition ease-in-out delay-150"
+                                    x-show="!is_started" 
+                                    x-on:click="startGame(matrix)"
+                                >
+                                    Start 
+                                </button>
+                                <button 
+                                    class="px-4 py-1 mx-auto border-2 rounded border-red-500 hover:text-white hover:bg-red-500 transition ease-in-out delay-150"
+                                    x-show="is_started" 
+                                    x-on:click="stopGame()"
+                                >
+                                    Stop 
+                                </button>
+                            </div>
+                            <div class="basis-1/3">
+                                <button 
+                                    class="px-4 py-1 mx-auto border-2 rounded border-slate-500 hover:text-white hover:bg-slate-500 transition ease-in-out delay-150"
+                                    x-on:click="matrix = await initMatrix()"    
+                                >
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <table>
+                    <template x-for="(row, i) in matrix">
+                        <tr>
+                            <template x-for="(cell, j) in row">
+                                <td>
+                                    <div 
+                                        class="cell"
+                                        :class="cell == 1 ? 'alive' : ''"
+                                        x-on:click="toggleLifeInCell(i, j)"
+                                        x-on:mouseover="$event.shiftKey ? toggleLifeInCell(i, j) : null"
+                                    >
 
-                                </div>
-                            </td>
-                        </template>
-                    </tr>
-                </template>
-                </table>
+                                    </div>
+                                </td>
+                            </template>
+                        </tr>
+                    </template>
+                    </table>
+                </div>
             </div>
         </center>
     </body>
