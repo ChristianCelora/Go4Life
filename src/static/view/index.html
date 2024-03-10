@@ -69,20 +69,6 @@
             } 
             
         </script>
-
-
-        <style>
-            .cell {
-                width: 5px;
-                height: 5px;
-                border: 1px solid black;
-                cursor: pointer;
-            }
-
-            .alive {
-                background-color: brown;
-            }
-        </style>
     </head>
     <body>
         <center class="flex flex-row pt-3">
@@ -141,20 +127,18 @@
                             </div>
                         </div>
                     </div>
-                    <table>
+                    <div class="flex flex-row">
                     <template x-for="(row, i) in matrix">
-                        <tr>
+                        <div>
                             <template x-for="(cell, j) in row">
-                                <td>
-                                    <div 
-                                        class="cell"
-                                        :class="cell == 1 ? 'alive' : ''"
-                                        x-on:click="toggleLifeInCell(i, j)"
-                                        x-on:mouseover="$event.shiftKey ? toggleLifeInCell(i, j) : null"
-                                    >
+                                <div 
+                                    class="border border-stone-300 w-3 h-3"
+                                    :class="cell == 1 ? 'bg-violet-600' : ''"
+                                    x-on:click="toggleLifeInCell(i, j)"
+                                    x-on:mouseover="$event.shiftKey ? toggleLifeInCell(i, j) : null"
+                                >
 
-                                    </div>
-                                </td>
+                                </div>
                             </template>
                         </tr>
                     </template>
