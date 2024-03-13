@@ -7,6 +7,7 @@
                 return { 
                     matrix: [],
                     is_started: false,
+                    time_between_steps: 3000,
                     async initMatrix() {
                         let res = await (await fetch('/render')).json()
                         return res.matrix
@@ -29,7 +30,7 @@
                                     this.matrix = new_matrix
                                     this.gameLoop(this.matrix)
                                 }
-                            }, 3000)
+                            }, this.time_between_steps)
                         }
                     },
                     async nextStep(matrix) {
@@ -72,7 +73,7 @@
     </head>
     <body>
         <center class="flex flex-row pt-3">
-            <div class="basis-2/3 mx-auto">
+            <div class="basis-5/6 mx-auto">
                 <div>
                     <div class="font-bold tracking-wide text-2xl pb-2">
                         Conway's Game of Life
@@ -90,13 +91,26 @@
                     x-data="gameLifeComponent()"
                     x-init="matrix = await initMatrix()"
                 >
-                    
+                    <div class="flex flex-row border mb-3">
+                        <div class="flex flex-row basis-1/3 p-2 mx-auto">
+                            <label for="time_between_steps" class="mr-3 pt-1 font-light">
+                                Game Speed (ms)
+                            </label>
+                            <input 
+                                class="border-2 border-grey-200 rounded shadow-sm font-light p-1"
+                                name="time_between_steps" 
+                                type="text" 
+                                x-model="time_between_steps"
+                            >
+                        </div>
+                    </div>
                     <div class="flex flex-row pb-2">
                         <div class="flex flex-row basis-2/3 mx-auto">
                             <div class="basis-1/3">
                                 <button 
-                                class="px-4 py-1 mx-auto border-2 rounded border-sky-500 hover:text-white hover:bg-sky-500 transition ease-in-out delay-150"
-                                x-on:click="matrix = await nextStep(matrix)"    
+                                class="px-4 py-1 mx-auto border-2 rounded border-sky-500 disabled:opacity-60 enabled:hover:text-white enabled:hover:bg-sky-500 transition ease-in-out delay-150"
+                                x-on:click="!is_started ? matrix = await nextStep(matrix) : null"
+                                x-bind:disabled="is_started"
                                 >
                                     Next step
                                 </button>
