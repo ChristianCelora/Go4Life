@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/tbxark/g4vercel"
 	"golife/api"
 	"log"
 	"net/http"
 	"strconv"
+	// . "github.com/tbxark/g4vercel"
 )
 
 const (
@@ -36,9 +36,6 @@ func main() {
 
 // Vercel is serverless
 func Handler(w http.ResponseWriter, r *http.Request) {
-	server := New()
-
-	server.GET("/render", api.RenderMatrix)
-
-	server.Handle(w, r)
+	registerStaticPages()
+	registerApiRoutes()
 }
