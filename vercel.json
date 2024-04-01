@@ -1,8 +1,9 @@
 {
-    "routes": [
+    "trailingSlash": false,
+    "rewrites": [
         {
-            "src": "/(.*)",
-            "dest": "/src"
+            "source": "/(.*)",
+            "destination": "/src/main.go"
         }
     ]
 }
