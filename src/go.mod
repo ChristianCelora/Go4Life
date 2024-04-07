@@ -1,5 +1,4 @@
 module golife
+module github.com/tbxark/g4vercel
 
 go 1.21.1
-
-require github.com/tbxark/g4vercel v0.0.4
