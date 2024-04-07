@@ -5,9 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-
 	// . "github.com/tbxark/g4vercel"
-	"fmt"
 )
 
 const (
@@ -38,7 +36,6 @@ func main() {
 
 // Vercel is serverless
 func Handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "<h1>Hello from Go!</h1>")
-	// registerStaticPages()
-	// registerApiRoutes()
+	registerStaticPages()
+	registerApiRoutes()
 }
