@@ -30,11 +30,8 @@ type GetNextStepReq struct {
 
 func GetNextStep(w http.ResponseWriter, req *http.Request) {
 	var req_body GetNextStepReq
-	// req_body_contents, _ := io.ReadAll(req.Body)
-	// log.Printf("%s", req_body_contents)
 	err := json.NewDecoder(req.Body).Decode(&req_body)
 	if err != nil {
-		// http.Error(w, err.Error(), http.StatusBadRequest)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(ApiErrorRes{
 			Code: http.StatusBadRequest,
