@@ -170,6 +170,7 @@
                                     x-on:click="toggleLifeInCell(i, j)"
                                     x-on:mouseover="$event.shiftKey || isMobile ? toggleLifeInCell(i, j) : null"
                                     @touchstart="toggleLifeInCell(i, j)"
+                                    @touchmove="toggleLifeInCell(i, j)"
                                 >
 
                                 </div>
