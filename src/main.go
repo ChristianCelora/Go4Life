@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/tbxark/g4vercel"
 	"golife/api"
 	"log"
 	"net/http"
@@ -32,10 +31,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-// Vercel is serverless
-func Handler(w http.ResponseWriter, r *http.Request) {
-	server := New()
-	server.GET("/render", api.RenderMatrix)
 }
