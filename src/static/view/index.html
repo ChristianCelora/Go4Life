@@ -9,7 +9,7 @@
                     is_started: false,
                     time_between_steps: 3000,
                     async initMatrix() {
-                        let res = await (await fetch('/api/render')).json()
+                        let res = await (await fetch('/render')).json()
                         return res.matrix
                     },
                     toggleLifeInCell(i, j) {
@@ -34,7 +34,7 @@
                         }
                     },
                     async nextStep(matrix) {
-                        let res = await fetch("/api/step", {
+                        let res = await fetch("/step", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -53,7 +53,7 @@
             }
 
             async function nextStep(matrix) {
-                let res = await fetch("/api/step", {
+                let res = await fetch("/step", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -141,7 +141,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-row justify-center">
+                    <div class="flex flex-row">
                     <template x-for="(row, i) in matrix">
                         <div>
                             <template x-for="(cell, j) in row">
