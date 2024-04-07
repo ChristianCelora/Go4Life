@@ -37,8 +37,5 @@ func main() {
 // Vercel is serverless
 func Handler(w http.ResponseWriter, r *http.Request) {
 	server := New()
-
-	server.GET("/render", api.RenderMatrix)
-
-	server.Handle(w, r)
+	server.GET("/api/render", api.RenderMatrix)
 }
