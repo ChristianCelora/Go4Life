@@ -3,6 +3,22 @@
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
+            function isMobile() {
+                const toMatch = [
+                    /Android/i,
+                    /webOS/i,
+                    /iPhone/i,
+                    /iPad/i,
+                    /iPod/i,
+                    /BlackBerry/i,
+                    /Windows Phone/i
+                ];
+                
+                return toMatch.some((toMatchItem) => {
+                    return navigator.userAgent.match(toMatchItem);
+                });
+            }
+
             function gameLifeComponent() {
                 return { 
                     matrix: [],
@@ -71,7 +87,10 @@
             
         </script>
     </head>
-    <body>
+    <body 
+        x-data="{ isMobile: isMobile() }"
+        x-init="console.log(isMobile ? 'Running on Mobile' : 'Running on Desktop')"
+    >
         <center class="flex flex-row pt-3">
             <div class="basis-5/6 mx-auto">
                 <div>
@@ -149,7 +168,7 @@
                                     class="border border-stone-300 w-3 h-3"
                                     :class="cell == 1 ? 'bg-violet-600' : ''"
                                     x-on:click="toggleLifeInCell(i, j)"
-                                    x-on:mouseover="$event.shiftKey ? toggleLifeInCell(i, j) : null"
+                                    x-on:mouseover="$event.shiftKey || isMobile ? toggleLifeInCell(i, j) : null"
                                 >
 
                                 </div>
