@@ -169,6 +169,7 @@
                                     :class="cell == 1 ? 'bg-violet-600' : ''"
                                     x-on:click="toggleLifeInCell(i, j)"
                                     x-on:mouseover="$event.shiftKey || isMobile ? toggleLifeInCell(i, j) : null"
+                                    @touchstart="toggleLifeInCell(i, j)"
                                 >
 
                                 </div>
