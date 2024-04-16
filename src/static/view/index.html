@@ -32,7 +32,9 @@
                         let cell = document.elementFromPoint(clientX, clientY)
                         if (cell) {
                             let cell_data = Alpine.evaluate(cell, '$data')
-                            this.toggleLifeInCell(cell_data.i, cell_data.j)
+                            if (cell_data.i !== undefined && cell_data.j !== undefined) {
+                                this.toggleLifeInCell(cell_data.i, cell_data.j)
+                            }
                         }
                     },
                     toggleLifeInCell(i, j) {
