@@ -1,5 +1,11 @@
 package internal
 
+import (
+	"golife/reader"
+	"strconv"
+	"strings"
+)
+
 const (
 	MATRIX_SIZE = 100
 	DEAD_CELL   = 0
@@ -18,6 +24,21 @@ func (c *Cell) isAlive() bool {
 
 func CreateFieldMatrix() *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
 	var matrix [MATRIX_SIZE][MATRIX_SIZE]uint8
+	return &matrix
+}
+
+func LoadFieldMatrix(path string) *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
+	coordinates_file, err := reader.ReadLines(path)
+	if err != nil {
+		panic("error reading file: " + path)
+	}
+	var matrix [MATRIX_SIZE][MATRIX_SIZE]uint8
+	for _, coord := range coordinates_file {
+		life_coord := strings.Split(coord, ",")
+		row, _ := strconv.Atoi(life_coord[0])
+		col, _ := strconv.Atoi(life_coord[1])
+		matrix[row][col] = LIFE_CELL
+	}
 	return &matrix
 }
 

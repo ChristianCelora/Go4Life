@@ -229,5 +229,38 @@ func TestNextGeneration(t *testing.T) {
 			}
 		}
 	}
+}
 
+func TestLoadFieldMatrix(t *testing.T) {
+	tests := []struct {
+		pattern_path         string
+		expected_matrix_life []Coordinates
+	}{
+		{
+			pattern_path: "../templates/test-square",
+			expected_matrix_life: []Coordinates{
+				{0, 0},
+				{0, 1},
+				{1, 0},
+				{1, 1},
+			},
+		},
+	}
+
+	for _, test := range tests {
+		actual_matrix := LoadFieldMatrix(test.pattern_path)
+		expected_matrix := CreateFieldMatrix()
+		for _, c := range test.expected_matrix_life {
+			setLifeInCell(Cell{expected_matrix, c.x, c.y})
+		}
+
+		for i, row := range actual_matrix {
+			for j, cell := range row {
+				if cell != expected_matrix[i][j] {
+					t.Logf("matrix: %v", actual_matrix)
+					t.Fatalf("cell %v value %d, different than expected %d", Cell{actual_matrix, i, j}, cell, expected_matrix[i][j])
+				}
+			}
+		}
+	}
 }

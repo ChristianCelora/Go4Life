@@ -6,9 +6,17 @@ import (
 	"net/http"
 )
 
+const (
+	TEMPLATE_PATH = "../templates/"
+)
+
 type ApiErrorRes struct {
 	Code int
 	Msg  string
+}
+
+type RenderMatrixReq struct {
+	Template string
 }
 
 type RenderMatrixRes struct {
@@ -16,7 +24,23 @@ type RenderMatrixRes struct {
 }
 
 func RenderMatrix(w http.ResponseWriter, req *http.Request) {
-	matrix := internal.CreateFieldMatrix()
+	var req_body RenderMatrixReq
+	var matrix *[internal.MATRIX_SIZE][internal.MATRIX_SIZE]uint8
+	err := json.NewDecoder(req.Body).Decode(&req_body)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ApiErrorRes{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		})
+		return
+	}
+
+	if req_body.Template != "" {
+		matrix = internal.LoadFieldMatrix(TEMPLATE_PATH + req_body.Template)
+	} else {
+		matrix = internal.CreateFieldMatrix()
+	}
 	response := RenderMatrixRes{
 		Matrix: *matrix,
 	}
