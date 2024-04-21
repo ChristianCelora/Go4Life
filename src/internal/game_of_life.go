@@ -2,6 +2,7 @@ package internal
 
 import (
 	"golife/reader"
+	"log"
 	"strconv"
 	"strings"
 )
@@ -30,7 +31,8 @@ func CreateFieldMatrix() *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
 func LoadFieldMatrix(path string) *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
 	coordinates_file, err := reader.ReadLines(path)
 	if err != nil {
-		panic("error reading file: " + path)
+		// fix this. will crash the server if fails
+		log.Fatal("error reading file: " + path)
 	}
 	var matrix [MATRIX_SIZE][MATRIX_SIZE]uint8
 	for _, coord := range coordinates_file {

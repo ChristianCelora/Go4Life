@@ -2,13 +2,10 @@ package main
 
 import (
 	"golife/api"
+	"golife/server"
 	"log"
 	"net/http"
 	"strconv"
-)
-
-const (
-	SERVER_PORT = 8090
 )
 
 func registerStaticPages() {
@@ -22,12 +19,11 @@ func registerApiRoutes() {
 }
 
 func main() {
-	print("Go 4 Life")
-
+	env := server.GetEnv()
 	registerStaticPages()
 	registerApiRoutes()
-	log.Print("Listening on port " + strconv.Itoa(SERVER_PORT))
-	err := http.ListenAndServe(":"+strconv.Itoa(SERVER_PORT), nil)
+	log.Printf("Listening on port %s", strconv.Itoa(env.Port))
+	err := http.ListenAndServe(":"+strconv.Itoa(env.Port), nil)
 	if err != nil {
 		log.Fatal(err)
 	}

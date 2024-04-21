@@ -3,11 +3,9 @@ package api
 import (
 	"encoding/json"
 	"golife/internal"
+	"golife/server"
 	"net/http"
-)
-
-const (
-	TEMPLATE_PATH = "../templates/"
+	"path/filepath"
 )
 
 type ApiErrorRes struct {
@@ -24,20 +22,14 @@ type RenderMatrixRes struct {
 }
 
 func RenderMatrix(w http.ResponseWriter, req *http.Request) {
-	var req_body RenderMatrixReq
+	var template string
 	var matrix *[internal.MATRIX_SIZE][internal.MATRIX_SIZE]uint8
-	err := json.NewDecoder(req.Body).Decode(&req_body)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(ApiErrorRes{
-			Code: http.StatusBadRequest,
-			Msg:  err.Error(),
-		})
-		return
-	}
+	env := server.GetEnv()
+	template = req.URL.Query().Get("Template")
 
-	if req_body.Template != "" {
-		matrix = internal.LoadFieldMatrix(TEMPLATE_PATH + req_body.Template)
+	if template != "" {
+		template_path := filepath.Join(env.Tempalate_folder, template)
+		matrix = internal.LoadFieldMatrix(template_path)
 	} else {
 		matrix = internal.CreateFieldMatrix()
 	}
