@@ -234,10 +234,14 @@ func TestNextGeneration(t *testing.T) {
 func TestLoadFieldMatrix(t *testing.T) {
 	tests := []struct {
 		pattern_path         string
+		offset_x             int
+		offset_y             int
 		expected_matrix_life []Coordinates
 	}{
 		{
 			pattern_path: "../templates/test-square",
+			offset_x:     0,
+			offset_y:     0,
 			expected_matrix_life: []Coordinates{
 				{0, 0},
 				{0, 1},
@@ -245,10 +249,43 @@ func TestLoadFieldMatrix(t *testing.T) {
 				{1, 1},
 			},
 		},
+		{
+			pattern_path: "../templates/test-square",
+			offset_x:     5,
+			offset_y:     0,
+			expected_matrix_life: []Coordinates{
+				{5, 0},
+				{5, 1},
+				{6, 0},
+				{6, 1},
+			},
+		},
+		{
+			pattern_path: "../templates/test-square",
+			offset_x:     0,
+			offset_y:     4,
+			expected_matrix_life: []Coordinates{
+				{0, 4},
+				{0, 5},
+				{1, 4},
+				{1, 5},
+			},
+		},
+		{
+			pattern_path: "../templates/test-square",
+			offset_x:     7,
+			offset_y:     10,
+			expected_matrix_life: []Coordinates{
+				{7, 10},
+				{7, 11},
+				{8, 10},
+				{8, 11},
+			},
+		},
 	}
 
 	for _, test := range tests {
-		actual_matrix := LoadFieldMatrix(test.pattern_path)
+		actual_matrix := LoadFieldMatrix(test.pattern_path, test.offset_x, test.offset_y)
 		expected_matrix := CreateFieldMatrix()
 		for _, c := range test.expected_matrix_life {
 			setLifeInCell(Cell{expected_matrix, c.x, c.y})

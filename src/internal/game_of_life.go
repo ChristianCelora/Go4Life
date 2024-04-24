@@ -28,18 +28,25 @@ func CreateFieldMatrix() *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
 	return &matrix
 }
 
-func LoadFieldMatrix(path string) *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
+func LoadFieldMatrix(path string, offset_x, offset_y int) *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
 	coordinates_file, err := reader.ReadLines(path)
 	if err != nil {
 		// fix this. will crash the server if fails
 		log.Fatal("error reading file: " + path)
+	}
+	if offset_x >= MATRIX_SIZE || offset_y >= MATRIX_SIZE {
+		log.Fatal("offset exceeding matrix. offsetX", offset_x, "offsetY", offset_y)
 	}
 	var matrix [MATRIX_SIZE][MATRIX_SIZE]uint8
 	for _, coord := range coordinates_file {
 		life_coord := strings.Split(coord, ",")
 		row, _ := strconv.Atoi(life_coord[0])
 		col, _ := strconv.Atoi(life_coord[1])
-		matrix[row][col] = LIFE_CELL
+		row += offset_x
+		col += offset_y
+		if row < MATRIX_SIZE && col < MATRIX_SIZE {
+			matrix[row][col] = LIFE_CELL
+		}
 	}
 	return &matrix
 }

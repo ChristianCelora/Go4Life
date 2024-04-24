@@ -6,6 +6,7 @@ import (
 	"golife/server"
 	"net/http"
 	"path/filepath"
+	"strconv"
 )
 
 type ApiErrorRes struct {
@@ -15,6 +16,8 @@ type ApiErrorRes struct {
 
 type RenderMatrixReq struct {
 	Template string
+	offsetX  int
+	offsetY  int
 }
 
 type RenderMatrixRes struct {
@@ -22,14 +25,22 @@ type RenderMatrixRes struct {
 }
 
 func RenderMatrix(w http.ResponseWriter, req *http.Request) {
-	var template string
 	var matrix *[internal.MATRIX_SIZE][internal.MATRIX_SIZE]uint8
 	env := server.GetEnv()
-	template = req.URL.Query().Get("Template")
+	req_query := req.URL.Query()
+	request := RenderMatrixReq{
+		Template: req_query.Get("Template"),
+	}
+	if req_query.Has("offsetX") {
+		request.offsetX, _ = strconv.Atoi(req_query.Get("offsetX"))
+	}
+	if req_query.Has("offsetY") {
+		request.offsetY, _ = strconv.Atoi(req_query.Get("offsetY"))
+	}
 
-	if template != "" {
-		template_path := filepath.Join(env.Tempalate_folder, template)
-		matrix = internal.LoadFieldMatrix(template_path)
+	if request.Template != "" {
+		template_path := filepath.Join(env.Tempalate_folder, request.Template)
+		matrix = internal.LoadFieldMatrix(template_path, request.offsetX, request.offsetY)
 	} else {
 		matrix = internal.CreateFieldMatrix()
 	}
