@@ -15,7 +15,7 @@ type ApiErrorRes struct {
 }
 
 type RenderMatrixReq struct {
-	Template string
+	template string
 	offsetX  int
 	offsetY  int
 }
@@ -29,7 +29,7 @@ func RenderMatrix(w http.ResponseWriter, req *http.Request) {
 	env := server.GetEnv()
 	req_query := req.URL.Query()
 	request := RenderMatrixReq{
-		Template: req_query.Get("Template"),
+		template: req_query.Get("template"),
 	}
 	if req_query.Has("offsetX") {
 		request.offsetX, _ = strconv.Atoi(req_query.Get("offsetX"))
@@ -38,8 +38,8 @@ func RenderMatrix(w http.ResponseWriter, req *http.Request) {
 		request.offsetY, _ = strconv.Atoi(req_query.Get("offsetY"))
 	}
 
-	if request.Template != "" {
-		template_path := filepath.Join(env.Tempalate_folder, request.Template)
+	if request.template != "" {
+		template_path := filepath.Join(env.Tempalate_folder, request.template)
 		matrix = internal.LoadFieldMatrix(template_path, request.offsetX, request.offsetY)
 	} else {
 		matrix = internal.CreateFieldMatrix()
