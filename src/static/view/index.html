@@ -22,17 +22,22 @@
             function gameLifeComponent() {
                 return { 
                     matrix: [],
+                    rows: 50,
+                    cols: 50,
                     is_started: false,
                     time_between_steps: 1000,
                     async initMatrix(template = '', offset_x = 0, offset_y = 0) {
                         let uri = '/api/render'
+                        let uri_params = new URLSearchParams({
+                            rows: this.rows,
+                            cols: this.cols
+                        })
                         if (template != '') {
-                            uri += '?'+new URLSearchParams({
-                                template: template,
-                                offsetX: offset_x,
-                                offsetY: offset_y,
-                            })
+                            uri_params.append("template", template)
+                            uri_params.append("offsetX", offset_x)
+                            uri_params.append("offsetY", offset_y)
                         }
+                        uri += '?'+uri_params
                         let res = await (await fetch(uri)).json()
                         return res.matrix
                     },

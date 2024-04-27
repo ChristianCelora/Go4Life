@@ -1,22 +1,31 @@
 package internal
 
-import "testing"
+import (
+	"testing"
+)
+
+const (
+	TEST_MATRIX_SIZE = 20
+)
 
 func TestCreateFieldMatrix(t *testing.T) {
-	n := MATRIX_SIZE
-	matrix := CreateFieldMatrix()
+	exp_rows := 9
+	exp_cols := 4
 
-	if len(matrix) != n {
-		t.Fatalf("Matrix columns count expected %d, actual %d", n, len(matrix))
+	matrix := CreateFieldMatrix(exp_rows, exp_cols)
+	act_rows, act_cols := getMatrixDimensions(matrix)
+
+	if act_rows != exp_rows {
+		t.Fatalf("Matrix rows count expected %d, actual %d", exp_rows, act_rows)
 	}
 
-	if len(matrix[0]) != n {
-		t.Fatalf("Matrix rows count expected %d, actual %d", n, len(matrix))
+	if act_cols != exp_cols {
+		t.Fatalf("Matrix columns count expected %d, actual %d", exp_cols, act_cols)
 	}
 }
 
 func TestSetLifeInCell(t *testing.T) {
-	matrix := CreateFieldMatrix()
+	matrix := CreateFieldMatrix(TEST_MATRIX_SIZE, TEST_MATRIX_SIZE)
 	cell := Cell{
 		matrix: matrix,
 		x:      0,
@@ -88,7 +97,7 @@ func TestCountCellNeighbours(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		matrix := CreateFieldMatrix()
+		matrix := CreateFieldMatrix(TEST_MATRIX_SIZE, TEST_MATRIX_SIZE)
 		cell := Cell{matrix, test.cell_coordinate.x, test.cell_coordinate.y}
 		for _, coordinates := range test.other_life_coordinates {
 			setLifeInCell(Cell{matrix: matrix, x: coordinates.x, y: coordinates.y})
@@ -208,12 +217,12 @@ func TestNextGeneration(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		old_matrix := CreateFieldMatrix()
+		old_matrix := CreateFieldMatrix(TEST_MATRIX_SIZE, TEST_MATRIX_SIZE)
 		for _, c := range test.matrix_life {
 			setLifeInCell(Cell{old_matrix, c.x, c.y})
 		}
 
-		expected_matrix := CreateFieldMatrix()
+		expected_matrix := CreateFieldMatrix(TEST_MATRIX_SIZE, TEST_MATRIX_SIZE)
 		for _, c := range test.expected_matrix_life {
 			setLifeInCell(Cell{expected_matrix, c.x, c.y})
 		}
@@ -285,8 +294,8 @@ func TestLoadFieldMatrix(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		actual_matrix := LoadFieldMatrix(test.pattern_path, test.offset_x, test.offset_y)
-		expected_matrix := CreateFieldMatrix()
+		actual_matrix := LoadFieldMatrix(test.pattern_path, test.offset_x, test.offset_y, TEST_MATRIX_SIZE, TEST_MATRIX_SIZE)
+		expected_matrix := CreateFieldMatrix(TEST_MATRIX_SIZE, TEST_MATRIX_SIZE)
 		for _, c := range test.expected_matrix_life {
 			setLifeInCell(Cell{expected_matrix, c.x, c.y})
 		}

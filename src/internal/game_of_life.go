@@ -8,13 +8,12 @@ import (
 )
 
 const (
-	MATRIX_SIZE = 100
-	DEAD_CELL   = 0
-	LIFE_CELL   = 1
+	DEAD_CELL = 0
+	LIFE_CELL = 1
 )
 
 type Cell struct {
-	matrix *[MATRIX_SIZE][MATRIX_SIZE]uint8
+	matrix [][]uint8
 	x      int
 	y      int
 }
@@ -23,32 +22,35 @@ func (c *Cell) isAlive() bool {
 	return c.matrix[c.x][c.y] == LIFE_CELL
 }
 
-func CreateFieldMatrix() *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
-	var matrix [MATRIX_SIZE][MATRIX_SIZE]uint8
-	return &matrix
+func CreateFieldMatrix(rows, cols int) [][]uint8 {
+	matrix := make([][]uint8, rows)
+	for i := 0; i < rows; i++ {
+		matrix[i] = make([]uint8, cols)
+	}
+	return matrix
 }
 
-func LoadFieldMatrix(path string, offset_x, offset_y int) *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
+func LoadFieldMatrix(path string, offset_x, offset_y, rows, cols int) [][]uint8 {
 	coordinates_file, err := reader.ReadLines(path)
 	if err != nil {
 		// fix this. will crash the server if fails
 		log.Fatal("error reading file: " + path)
 	}
-	if offset_x >= MATRIX_SIZE || offset_y >= MATRIX_SIZE {
+	if offset_x >= rows || offset_y >= cols {
 		log.Fatal("offset exceeding matrix. offsetX", offset_x, "offsetY", offset_y)
 	}
-	var matrix [MATRIX_SIZE][MATRIX_SIZE]uint8
+	matrix := CreateFieldMatrix(rows, cols)
 	for _, coord := range coordinates_file {
 		life_coord := strings.Split(coord, ",")
 		row, _ := strconv.Atoi(life_coord[0])
 		col, _ := strconv.Atoi(life_coord[1])
 		row += offset_x
 		col += offset_y
-		if row < MATRIX_SIZE && col < MATRIX_SIZE {
+		if row < rows && col < cols {
 			matrix[row][col] = LIFE_CELL
 		}
 	}
-	return &matrix
+	return matrix
 }
 
 func setLifeInCell(c Cell) {
@@ -58,8 +60,9 @@ func setLifeInCell(c Cell) {
 func countCellNeighbours(c Cell) int {
 	var i, j, count int
 
-	for i = max(0, c.x-1); i <= min(MATRIX_SIZE-1, c.x+1); i++ {
-		for j = max(0, c.y-1); j <= min(MATRIX_SIZE-1, c.y+1); j++ {
+	rows, cols := getMatrixDimensions(c.matrix)
+	for i = max(0, c.x-1); i <= min(rows-1, c.x+1); i++ {
+		for j = max(0, c.y-1); j <= min(cols-1, c.y+1); j++ {
 			if i == c.x && j == c.y {
 				continue
 			}
@@ -72,10 +75,11 @@ func countCellNeighbours(c Cell) int {
 	return count
 }
 
-func NextGeneration(matrix *[MATRIX_SIZE][MATRIX_SIZE]uint8) *[MATRIX_SIZE][MATRIX_SIZE]uint8 {
+func NextGeneration(matrix [][]uint8) [][]uint8 {
 	var n_neighbours int
 
-	new_matrix := CreateFieldMatrix()
+	rows, cols := getMatrixDimensions(matrix)
+	new_matrix := CreateFieldMatrix(rows, cols)
 	for i, row := range matrix {
 		for j := range row {
 			cell := Cell{matrix, i, j}
@@ -92,4 +96,15 @@ func NextGeneration(matrix *[MATRIX_SIZE][MATRIX_SIZE]uint8) *[MATRIX_SIZE][MATR
 	}
 
 	return new_matrix
+}
+
+func getMatrixDimensions(matrix [][]uint8) (int, int) {
+	var rows, cols int
+
+	rows = len(matrix)
+	if rows > 0 {
+		cols = len(matrix[0])
+	}
+
+	return rows, cols
 }
