@@ -4,55 +4,33 @@ import (
 	"encoding/json"
 	"golife/internal"
 	"golife/server"
+	"log"
 	"net/http"
 	"path/filepath"
-	"strconv"
 )
 
-type ApiErrorRes struct {
-	Code int
-	Msg  string
-}
-
-type RenderMatrixReq struct {
-	template string
-	offsetX  int
-	offsetY  int
-}
-
-type RenderMatrixRes struct {
-	Matrix [internal.MATRIX_SIZE][internal.MATRIX_SIZE]uint8 `json:"matrix"`
-}
-
 func RenderMatrix(w http.ResponseWriter, req *http.Request) {
-	var matrix *[internal.MATRIX_SIZE][internal.MATRIX_SIZE]uint8
+	var matrix [][]uint8
 	env := server.GetEnv()
-	req_query := req.URL.Query()
-	request := RenderMatrixReq{
-		template: req_query.Get("template"),
-	}
-	if req_query.Has("offsetX") {
-		request.offsetX, _ = strconv.Atoi(req_query.Get("offsetX"))
-	}
-	if req_query.Has("offsetY") {
-		request.offsetY, _ = strconv.Atoi(req_query.Get("offsetY"))
-	}
+	request := new(RenderMatrixReq).createFromQueryUrl(req.URL.Query())
 
 	if request.template != "" {
 		template_path := filepath.Join(env.Tempalate_folder, request.template)
-		matrix = internal.LoadFieldMatrix(template_path, request.offsetX, request.offsetY)
+		matrix = internal.LoadFieldMatrix(template_path, request.offsetX, request.offsetY, request.rows, request.cols)
 	} else {
-		matrix = internal.CreateFieldMatrix()
+		matrix = internal.CreateFieldMatrix(request.rows, request.cols)
 	}
 	response := RenderMatrixRes{
-		Matrix: *matrix,
+		Matrix: matrix,
+	}
+	json_response, err := response.MarshalJson()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Printf("error marshal response: %+v", err)
+		return
 	}
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(response)
-}
-
-type GetNextStepReq struct {
-	Matrix [internal.MATRIX_SIZE][internal.MATRIX_SIZE]uint8 `json:"matrix"`
+	w.Write(json_response)
 }
 
 func GetNextStep(w http.ResponseWriter, req *http.Request) {
@@ -67,11 +45,17 @@ func GetNextStep(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	matrix := internal.NextGeneration(&req_body.Matrix)
+	matrix := internal.NextGeneration(req_body.Matrix)
 
 	response := RenderMatrixRes{
-		Matrix: *matrix,
+		Matrix: matrix,
+	}
+	json_response, err := response.MarshalJson()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Printf("error marshal response: %+v", err)
+		return
 	}
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(response)
+	w.Write(json_response)
 }
