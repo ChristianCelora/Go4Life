@@ -14,7 +14,6 @@ func RenderMatrix(w http.ResponseWriter, req *http.Request) {
 	env := server.GetEnv()
 	request := new(RenderMatrixReq).createFromQueryUrl(req.URL.Query())
 
-	log.Printf("render req: %+v", request)
 	if request.template != "" {
 		template_path := filepath.Join(env.Tempalate_folder, request.template)
 		matrix = internal.LoadFieldMatrix(template_path, request.offsetX, request.offsetY, request.rows, request.cols)
@@ -27,7 +26,7 @@ func RenderMatrix(w http.ResponseWriter, req *http.Request) {
 	json_response, err := response.MarshalJson()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("error marshal: %+v", err)
+		log.Printf("error marshal response: %+v", err)
 		return
 	}
 	w.WriteHeader(http.StatusOK)
@@ -54,7 +53,7 @@ func GetNextStep(w http.ResponseWriter, req *http.Request) {
 	json_response, err := response.MarshalJson()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("error marshal: %+v", err)
+		log.Printf("error marshal response: %+v", err)
 		return
 	}
 	w.WriteHeader(http.StatusOK)
