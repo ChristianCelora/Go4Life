@@ -51,19 +51,3 @@ go run main.go
 ```
 
 Note: server should be recompiled in case of changes
-
-### Apache (not used)
-
-Apache2 is installed in the docker. Just run it inside the container
-
-```sh
-apachectl start
-```
-
-To check the docker ip run a docker inspect
-
-```sh
-docker inspect <container_ip>
-```
-
-and check for the NetworkSettings > Ports settings for the ip and port open to connection
