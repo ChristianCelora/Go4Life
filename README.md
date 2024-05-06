@@ -31,11 +31,24 @@ https://github.com/golang-standards/project-layout
 
 ## Run Tests
 
+### Unit tests
+
 To run tests run the CLi command
 
 ```sh
 go test -v <package>
 go test -v ./internal # Example of testing the internal package
+```
+
+### Integration tests
+
+We added Jest as a framework to integration tests on APIs. 
+Tests are under tests/Integration folder
+
+To run it enter the docker CLI and run 
+
+```sh
+npm test
 ```
 
 ## Run web server
