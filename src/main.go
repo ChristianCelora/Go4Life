@@ -9,8 +9,13 @@ import (
 )
 
 func registerStaticPages() {
+	// views
 	fs := http.FileServer(http.Dir("./static/view"))
-	http.Handle("/", fs)
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	// node modules
+	fs = http.FileServer(http.Dir("./node_modules/"))
+	http.Handle("/static/node_modules/", http.StripPrefix("/node_modules/", fs))
 }
 
 func registerApiRoutes() {

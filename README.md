@@ -59,8 +59,20 @@ For now we use go to render the static html pages of the project
 
 Init server
 
-```
+```sh
 go run main.go
 ```
 
 Note: server should be recompiled in case of changes
+
+## Build the FE
+
+I added Webpack bundler to this project to import the JS modules in the app.
+
+This has to be done because the plain HTML wasn't resolving the relative paths.
+
+To build the FE run:
+
+```sh
+npm run build
+```
