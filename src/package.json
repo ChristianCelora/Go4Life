@@ -1,7 +1,6 @@
 {
   "dependencies": {
-    "alpinejs": "^3.13.10",
-    "webpack-cli": "^5.1.4"
+    "alpinejs": "^3.13.10"
   },
   "devDependencies": {
     "css-loader": "^7.1.2",
