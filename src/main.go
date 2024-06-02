@@ -16,6 +16,7 @@ func registerStaticPages() {
 func registerApiRoutes() {
 	http.HandleFunc("/api/render", api.RenderMatrix)
 	http.HandleFunc("/api/step", api.GetNextStep)
+	http.HandleFunc("/api/healtcheck", api.Healtcheck)
 }
 
 func main() {

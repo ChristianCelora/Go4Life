@@ -59,3 +59,7 @@ func GetNextStep(w http.ResponseWriter, req *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(json_response)
 }
+
+func Healtcheck(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
