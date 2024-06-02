@@ -38,6 +38,9 @@
                         }
                         uri += '?'+uri_params
                         let res = await (await fetch(uri)).json()
+                        // refresh rows and cols after server render (case when exceed server limits)
+                        this.rows = res.matrix.length
+                        this.cols = res.matrix[0].length
                         return res.matrix
                     },
                     toggleLifeInCellFromCoordinates(clientX, clientY) {
@@ -149,7 +152,7 @@
                             <div class="flex flex-row">
                                 <div class="flex flex-row p-2 mx-auto">
                                     <label for="time_between_steps" class="mr-3 pt-1 font-light">
-                                        Matrix Dimensions
+                                        Matrix Dimensions (max 100x100)
                                     </label>
                                     <input 
                                         class="border-2 border-grey-200 rounded shadow-sm font-light p-1"
@@ -157,7 +160,7 @@
                                         type="text" 
                                         x-model="rows"
                                     >
-                                    <div class="align-middle">X</div>
+                                    <div class="h-100 lign-middle">X</div>
                                     <input 
                                         class="border-2 border-grey-200 rounded shadow-sm font-light p-1"
                                         name="cols" 
