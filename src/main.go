@@ -4,6 +4,7 @@ import (
 	"golife/api"
 	"golife/server"
 	"log"
+	"log/slog"
 	"net/http"
 	"strconv"
 )
@@ -23,9 +24,10 @@ func main() {
 	env := server.GetEnv()
 	registerStaticPages()
 	registerApiRoutes()
-	log.Printf("Listening on port %s", strconv.Itoa(env.Port))
+	slog.Info("Listening on", "port", strconv.Itoa(env.Port))
 	err := http.ListenAndServe(":"+strconv.Itoa(env.Port), nil)
 	if err != nil {
+		slog.Error("", "msg", err)
 		log.Fatal(err)
 	}
 }
