@@ -1,2 +1,4 @@
 .vscode/
 golife
+src/node_modules
+src/static/view/dist/*

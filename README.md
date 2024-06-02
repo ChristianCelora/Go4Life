@@ -31,11 +31,24 @@ https://github.com/golang-standards/project-layout
 
 ## Run Tests
 
+### Unit tests
+
 To run tests run the CLi command
 
 ```sh
 go test -v <package>
 go test -v ./internal # Example of testing the internal package
+```
+
+### Integration tests
+
+We added Jest as a framework to integration tests on APIs. 
+Tests are under tests/Integration folder
+
+To run it enter the docker CLI and run 
+
+```sh
+npm test
 ```
 
 ## Run web server
@@ -46,24 +59,20 @@ For now we use go to render the static html pages of the project
 
 Init server
 
-```
+```sh
 go run main.go
 ```
 
 Note: server should be recompiled in case of changes
 
-### Apache (not used)
+## Build the FE
 
-Apache2 is installed in the docker. Just run it inside the container
+I added Webpack bundler to this project to import the JS modules in the app.
 
-```sh
-apachectl start
-```
+This has to be done because the plain HTML wasn't resolving the relative paths.
 
-To check the docker ip run a docker inspect
+To build the FE run:
 
 ```sh
-docker inspect <container_ip>
+npm run build
 ```
-
-and check for the NetworkSettings > Ports settings for the ip and port open to connection
